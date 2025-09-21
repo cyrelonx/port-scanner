@@ -21,12 +21,19 @@ int main()
     WSAData wsaData;
     int startup = WSAStartup(MAKEWORD(2, 2), &wsaData);
 
-    if (!startup)
+    if (startup != 0)
     {
         cout << "Error: " << startup << "\n";
+        return 1;
     }
                         // ipv4   // tcp conn
     SOCKET sock = socket(AF_INET, SOCK_STREAM, 0);
+    if (sock == INVALID_SOCKET)
+    {
+        cout << "Socket creation failed: " << WSAGetLastError() << "\n";
+        WSACleanup();
+        return 1;
+    }
 
     sockaddr_in target;
     target.sin_family = AF_INET;
@@ -36,7 +43,7 @@ int main()
     // Estabilish connection
     int res = connect(sock, (sockaddr*)&target, sizeof(target));
     if (res == SOCKET_ERROR)
-    {
+    {  
         int err = WSAGetLastError();
         if (err == WSAECONNREFUSED || err == WSAETIMEDOUT)
             cout << "Port is closed or filtered (err: " << err << ")!\n";
