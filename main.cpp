@@ -20,13 +20,12 @@ int main()
 
     WSAData wsaData;
     int startup = WSAStartup(MAKEWORD(2, 2), &wsaData);
-                        // ipv4   // tcp conn
 
     if (!startup)
     {
         cout << "Error: " << startup << "\n";
     }
-
+                        // ipv4   // tcp conn
     SOCKET sock = socket(AF_INET, SOCK_STREAM, 0);
 
     sockaddr_in target;
